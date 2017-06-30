@@ -1,5 +1,5 @@
 # tensorflow-yolo
-
+change something based on tensorflow-yolo,use yolo to tracking people 
 ### Require
 	tensorflow-1.0
 ### download pretrained model
