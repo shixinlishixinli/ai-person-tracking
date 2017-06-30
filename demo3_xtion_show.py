@@ -211,44 +211,57 @@ if __name__ == "__main__":
                 image_center_y=(ymin+ymax)/2
                 depth=[1,1,1,1,1,1,1,1,1,1]
                 depth[1]=resized_img_depth[int(image_center_x)][int(image_center_y)]
-                depth[2]=resized_img_depth[int(image_center_x)+2][int(image_center_y)+2]
-                depth[3]=resized_img_depth[int(image_center_x)+2][int(image_center_y)-2]
-                depth[4]=resized_img_depth[int(image_center_x)-2][int(image_center_y)+2]
-                depth[5]=resized_img_depth[int(image_center_x)-2][int(image_center_y)-2]
-                depth[6]=resized_img_depth[int(image_center_x)+15][int(image_center_y)+15]
-                depth[7]=resized_img_depth[int(image_center_x)+15][int(image_center_y)-15]
-                depth[8]=resized_img_depth[int(image_center_x)-15][int(image_center_y)+15]
-                depth[9]=resized_img_depth[int(image_center_x)-15][int(image_center_y)-15]
+
+      
                 if class_num==14:
                     i=0
                     j=0
+                    k=0
                     depth_all=0
+                    right=int(image_center_x)+k
+                    left=int(image_center_x)-k
+                    up=int(image_center_y)+k
+                    down=int(image_center_y)-k
+                    while depth_all==0:
+                        k=k+1
+                        right=int(image_center_x)+k
+                        left=int(image_center_x)-k
+                        up=int(image_center_y)+k
+                        down=int(image_center_y)-k                       
+                        if int(image_center_x)+k>447:
+                            right=447
+                        if int(image_center_y)+k>447:
+                            up=447
+                        if int(image_center_x)-k<0:
+                            left=0
+                        if int(image_center_y)-k<0:
+                            down=0
+                        print("aa")
+                        depth[2]=resized_img_depth[right][up]
+                        depth[3]=resized_img_depth[right][down]
+                        depth[4]=resized_img_depth[left][up]
+                        depth[5]=resized_img_depth[left][down]
+                        i=0
+                        while i!=5:
+                            print("bb")
+                            i=i+1
+                            if not math.isnan(depth[i]):
+                                depth_all=depth_all+depth[i]
+                                print ("depth")
+                                print (depth[i])
+                                j=j+1
+                        if j!=0: 
+                            print ("cc")   
+                            depth_center=depth_all/j
+                            depth_center_last=depth_center
                     
-                    while i!=9:
-                        print ("aa")
-                        i=i+1
-                        if not math.isnan(depth[i]):
-                            depth_all=depth_all+depth[i]
-                            print ("depth")
-                            print (depth[i])
-                            j=j+1
-                    if j!=0:    
-                        depth_center=depth_all/j
-                        depth_center_last=depth_center
-                    if j==0:
-                        depth_center=depth_center_last
-                    if depth_all==0:
-                        print (depth[1])
-                        print (depth[2])
-                        print (depth[3])
-                        print (depth[4])
-                        print ("not")
-                        print (depth[5])
-                        print ("ok")
-                        depth_center=depth_center_last
+
+                    ############################
+                    print ("dd") 
                     angular_z = -2.0 * (image_center_x-224) / 224* max_speed_angular
                     angular_y = image_center_x * 0.0025
-                    print (depth_all)
+                    #print (depth_all)
+                    print ("depth_center")
                     print (depth_center)
                     dis = (depth_center - dis_desired)
                     if dis > 2:
@@ -272,5 +285,5 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("Shutting down")
-    #cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
 
